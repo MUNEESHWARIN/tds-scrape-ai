@@ -1,0 +1,20 @@
+[
+  {
+    "title": "GA5 Question 8 Clarification",
+    "url": "https://discourse.onlinedegree.iitm.ac.in/t/ga5-question-8-clarification/155939",
+    "content": "Use the model that's mentioned in the question. For gpt-3.5-turbo-0125, use that specific model.",
+    "date": "2025-04-10"
+  },
+  {
+    "title": "API Usage Guidelines",
+    "url": "https://discourse.onlinedegree.iitm.ac.in/t/api-usage/123456",
+    "content": "Guidelines for using APIs in TDS assignments and projects.",
+    "date": "2025-04-08"
+  },
+  {
+    "title": "Python Environment Setup",
+    "url": "https://discourse.onlinedegree.iitm.ac.in/t/python-setup/123457",
+    "content": "How to set up Python environment for TDS course work.",
+    "date": "2025-04-05"
+  }
+]

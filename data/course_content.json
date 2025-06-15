@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Tools in Data Science",
+    "url": "https://tds.s-anand.net/",
+    "content": "Main course page for TDS with various tools and techniques"
+  },
+  {
+    "title": "Python Tools",
+    "url": "https://tds.s-anand.net/#/uv",
+    "content": "Python package management with uv"
+  },
+  {
+    "title": "AI Code Editors",
+    "url": "https://tds.s-anand.net/#/github-copilot",
+    "content": "Using GitHub Copilot for AI-assisted coding"
+  },
+  {
+    "title": "LLM APIs",
+    "url": "https://tds.s-anand.net/#/llm",
+    "content": "Working with Large Language Model APIs"
+  }
+]
