@@ -218,9 +218,6 @@ def home():
     <p><a href="/api/test">Test API Status</a></p>
     '''
 
-# Vercel serverless function handler
-def handler(request):
-    return app(request.environ, lambda *args: None)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
