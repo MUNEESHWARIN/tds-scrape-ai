@@ -1,0 +1,24 @@
+providers:
+  - id: my-api
+    type: custom
+    baseUrl: "https://tds-scrape-ai.vercel.app/api/"
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      question: "{{input}}"
+    parseResponse: |
+      async (response) => {
+        const data = await response.json();
+        return data.answer;
+      }
+
+scenarios:
+  - name: GA5 Deadline Check
+    config:
+      provider: my-api
+    inputs:
+      - "What is the deadline for GA5?"
+    tests:
+      - type: contains
+        value: "deadline"
