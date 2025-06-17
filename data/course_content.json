@@ -1,22 +1,27 @@
 [
   {
-    "title": "Tools in Data Science",
+    "title": "Tools in Data Science - Main Course",
     "url": "https://tds.s-anand.net/",
-    "content": "Main course page for TDS with various tools and techniques"
+    "content": "Main course page for TDS covering Python tools, AI code editors, LLM APIs, and data science workflows. Includes uv package management, GitHub Copilot usage, and API integration techniques."
   },
   {
-    "title": "Python Tools",
+    "title": "Python Package Management with uv",
     "url": "https://tds.s-anand.net/#/uv",
-    "content": "Python package management with uv"
+    "content": "Learn to use uv for fast Python package management. Covers installation, virtual environments, and dependency management for data science projects."
   },
   {
-    "title": "AI Code Editors",
+    "title": "AI Code Editors - GitHub Copilot",
     "url": "https://tds.s-anand.net/#/github-copilot",
-    "content": "Using GitHub Copilot for AI-assisted coding"
+    "content": "Using GitHub Copilot for AI-assisted coding in data science. Best practices, prompt engineering for code generation, and integration with development workflows."
   },
   {
-    "title": "LLM APIs",
+    "title": "Large Language Model APIs",
     "url": "https://tds.s-anand.net/#/llm",
-    "content": "Working with Large Language Model APIs"
+    "content": "Working with LLM APIs including OpenAI GPT models. Covers API usage, token management, model selection, and cost optimization strategies."
+  },
+  {
+    "title": "Data Science Project Structure",
+    "url": "https://tds.s-anand.net/#/project-structure",
+    "content": "Best practices for organizing data science projects. Includes directory structure, version control, documentation, and reproducibility guidelines."
   }
 ]

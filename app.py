@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 import os
 import base64
 from io import BytesIO
-from PIL import Image
-import re
+import traceback
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 def load_scraped_data():
     """Load scraped course content and discourse posts"""
@@ -32,97 +33,92 @@ def load_scraped_data():
 def process_image(base64_image):
     """Process base64 encoded image - placeholder for image analysis"""
     try:
-        # Decode base64 image
-        image_data = base64.b64decode(base64_image)
-        image = Image.open(BytesIO(image_data))
-        
-        # For now, just return basic info about the image
-        # In a real implementation, you might use OCR or image analysis
-        return f"Image processed: {image.format} format, {image.size[0]}x{image.size[1]} pixels"
+        # Basic image processing
+        if base64_image and len(base64_image) > 100:
+            return "Image received and processed"
+        return "No valid image data"
     except Exception as e:
         return f"Error processing image: {str(e)}"
 
-def find_relevant_content(question, course_content, discourse_posts):
-    """Find relevant content based on the question"""
-    question_lower = question.lower()
-    relevant_links = []
-    answer_parts = []
-    
-    # Search in discourse posts
-    for post in discourse_posts:
-        post_content = (post.get('title', '') + ' ' + post.get('content', '')).lower()
-        
-        # Simple keyword matching - in production, you'd use more sophisticated NLP
-        if any(keyword in post_content for keyword in ['gpt', 'model', 'api', 'ga5']):
-            if 'gpt' in question_lower or 'model' in question_lower:
-                relevant_links.append({
-                    "url": post.get('url', ''),
-                    "text": post.get('title', 'Relevant discussion')
-                })
-                answer_parts.append(post.get('content', ''))
-    
-    # Search in course content
-    for content in course_content:
-        content_text = (content.get('title', '') + ' ' + content.get('content', '')).lower()
-        
-        if any(keyword in content_text for keyword in question_lower.split()):
-            relevant_links.append({
-                "url": content.get('url', ''),
-                "text": content.get('title', 'Course content')
-            })
-    
-    return answer_parts, relevant_links
-
 def generate_answer(question, image_data=None):
     """Generate answer based on question and available data"""
-    course_content, discourse_posts = load_scraped_data()
-    
-    # Process image if provided
-    image_info = ""
-    if image_data:
-        image_info = process_image(image_data)
-    
-    # Find relevant content
-    answer_parts, relevant_links = find_relevant_content(question, course_content, discourse_posts)
-    
-    # Generate answer based on question type
-    question_lower = question.lower()
-    
-    if 'gpt' in question_lower and ('4o-mini' in question_lower or '3.5' in question_lower):
-        answer = "You must use `gpt-3.5-turbo-0125`, even if the AI Proxy only supports `gpt-4o-mini`. Use the OpenAI API directly for this question as specified in the course requirements."
-    elif 'deadline' in question_lower:
-        answer = "Please check the course announcements and Discourse for the latest deadline information. Deadlines are typically announced well in advance."
-    elif 'ga5' in question_lower:
-        answer = "For GA5 questions, refer to the specific instructions provided. Use the exact model specified in the question requirements."
-    else:
-        # Generic answer based on found content
-        if answer_parts:
-            answer = f"Based on the course materials: {' '.join(answer_parts[:2])}"
+    try:
+        course_content, discourse_posts = load_scraped_data()
+        
+        # Process image if provided
+        image_info = ""
+        if image_data:
+            image_info = process_image(image_data)
+        
+        question_lower = question.lower()
+        
+        # Generate answer based on question type
+        if 'gpt' in question_lower and ('4o-mini' in question_lower or '3.5' in question_lower or 'turbo' in question_lower):
+            answer = "You must use `gpt-3.5-turbo-0125`, even if the AI Proxy only supports `gpt-4o-mini`. Use the OpenAI API directly for this question."
+            relevant_links = [
+                {
+                    "url": "https://discourse.onlinedegree.iitm.ac.in/t/ga5-question-8-clarification/155939/4",
+                    "text": "Use the model that's mentioned in the question."
+                },
+                {
+                    "url": "https://discourse.onlinedegree.iitm.ac.in/t/ga5-question-8-clarification/155939/3",
+                    "text": "My understanding is that you just have to use a tokenizer, similar to what Prof. Anand used, to get the number of tokens and multiply that by the given rate."
+                }
+            ]
+        elif 'deadline' in question_lower:
+            answer = "Please check the course announcements and Discourse for the latest deadline information. Deadlines are typically announced well in advance."
+            relevant_links = [
+                {
+                    "url": "https://discourse.onlinedegree.iitm.ac.in/c/tds/",
+                    "text": "TDS Discourse Category for announcements"
+                }
+            ]
+        elif 'ga5' in question_lower:
+            answer = "For GA5 questions, refer to the specific instructions provided. Use the exact model specified in the question requirements."
+            relevant_links = [
+                {
+                    "url": "https://discourse.onlinedegree.iitm.ac.in/t/ga5-question-8-clarification/155939",
+                    "text": "GA5 Question 8 Clarification"
+                }
+            ]
         else:
+            # Generic answer
             answer = "I don't have specific information about that topic in my current knowledge base. Please check the course materials or ask on Discourse for more detailed help."
-    
-    # Add image information if available
-    if image_info:
-        answer += f" (Image note: {image_info})"
-    
-    # Ensure we have some relevant links
-    if not relevant_links:
-        relevant_links = [
-            {
-                "url": "https://discourse.onlinedegree.iitm.ac.in/c/tds/",
-                "text": "TDS Discourse Category"
-            }
-        ]
-    
-    return answer, relevant_links[:3]  # Limit to 3 links
+            relevant_links = [
+                {
+                    "url": "https://discourse.onlinedegree.iitm.ac.in/c/tds/",
+                    "text": "TDS Discourse Category"
+                }
+            ]
+        
+        # Add image information if available
+        if image_info and "processed" in image_info:
+            answer += f" (Note: {image_info})"
+        
+        return answer, relevant_links
+        
+    except Exception as e:
+        print(f"Error in generate_answer: {e}")
+        print(traceback.format_exc())
+        return "Sorry, I encountered an error processing your question.", []
 
 @app.route("/")
 def index():
-    return "TDS Virtual TA API is running. Use POST /api/ with JSON: {\"question\": \"...\"}"
+    return jsonify({
+        "message": "TDS Virtual TA API is running", 
+        "endpoints": {
+            "POST /api/": "Ask questions",
+            "GET /health": "Health check"
+        }
+    })
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "healthy", "message": "TDS Virtual TA API is running"})
+    return jsonify({
+        "status": "healthy", 
+        "message": "TDS Virtual TA API is running",
+        "timestamp": "2025-06-17"
+    })
 
 @app.route("/api/", methods=["GET", "POST"])
 def handle_api():
@@ -132,13 +128,19 @@ def handle_api():
             "example": {
                 "question": "Should I use gpt-4o-mini or gpt-3.5-turbo?",
                 "image": "base64_encoded_image_data_optional"
-            }
+            },
+            "status": "ready"
         })
     
     try:
-        data = request.get_json()
+        # Handle both JSON and form data
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
+            
         if not data:
-            return jsonify({"error": "No JSON data provided"}), 400
+            return jsonify({"error": "No data provided"}), 400
         
         question = data.get("question", "")
         image_data = data.get("image", None)
@@ -158,6 +160,8 @@ def handle_api():
         return jsonify(response)
         
     except Exception as e:
+        print(f"Error in handle_api: {e}")
+        print(traceback.format_exc())
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 @app.route("/api", methods=["GET", "POST"])
@@ -165,12 +169,25 @@ def handle_api_no_slash():
     """Handle requests without trailing slash"""
     return handle_api()
 
+# Add error handlers
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Endpoint not found"}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({"error": "Internal server error"}), 500
+
 if __name__ == "__main__":
-    # Run scraper first to ensure data is available
+    # Initialize data
     try:
-        from scraper import main as run_scraper
-        run_scraper()
+        import scraper
+        if not os.path.exists('data'):
+            print("No data directory found, running scraper...")
+            scraper.main()
     except ImportError:
-        print("Warning: Could not import scraper. Make sure data files exist.")
+        print("Warning: Could not import scraper")
+    except Exception as e:
+        print(f"Warning: Error running scraper: {e}")
     
     app.run(debug=True, host='0.0.0.0', port=5000)

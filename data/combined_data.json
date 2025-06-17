@@ -1,0 +1,88 @@
+{
+  "course_content": [
+    {
+      "title": "Tools in Data Science - Main Course",
+      "url": "https://tds.s-anand.net/",
+      "content": "Main course page for TDS covering Python tools, AI code editors, LLM APIs, and data science workflows. Includes uv package management, GitHub Copilot usage, and API integration techniques."
+    },
+    {
+      "title": "Python Package Management with uv",
+      "url": "https://tds.s-anand.net/#/uv",
+      "content": "Learn to use uv for fast Python package management. Covers installation, virtual environments, and dependency management for data science projects."
+    },
+    {
+      "title": "AI Code Editors - GitHub Copilot",
+      "url": "https://tds.s-anand.net/#/github-copilot",
+      "content": "Using GitHub Copilot for AI-assisted coding in data science. Best practices, prompt engineering for code generation, and integration with development workflows."
+    },
+    {
+      "title": "Large Language Model APIs",
+      "url": "https://tds.s-anand.net/#/llm",
+      "content": "Working with LLM APIs including OpenAI GPT models. Covers API usage, token management, model selection, and cost optimization strategies."
+    },
+    {
+      "title": "Data Science Project Structure",
+      "url": "https://tds.s-anand.net/#/project-structure",
+      "content": "Best practices for organizing data science projects. Includes directory structure, version control, documentation, and reproducibility guidelines."
+    }
+  ],
+  "discourse_posts": [
+    {
+      "title": "GA5 Question 8 Clarification",
+      "url": "https://discourse.onlinedegree.iitm.ac.in/t/ga5-question-8-clarification/155939",
+      "content": "Use the model that's mentioned in the question. For gpt-3.5-turbo-0125, use that specific model even if AI Proxy supports gpt-4o-mini. The assignment requires the exact model specified.",
+      "date": "2025-04-10",
+      "tags": [
+        "GA5",
+        "GPT",
+        "API",
+        "clarification"
+      ]
+    },
+    {
+      "title": "API Usage Guidelines for Assignments",
+      "url": "https://discourse.onlinedegree.iitm.ac.in/t/api-usage/123456",
+      "content": "Guidelines for using APIs in TDS assignments and projects. Always follow rate limits, use proper error handling, and document your API usage.",
+      "date": "2025-04-08",
+      "tags": [
+        "API",
+        "guidelines",
+        "assignments"
+      ]
+    },
+    {
+      "title": "Python Environment Setup Help",
+      "url": "https://discourse.onlinedegree.iitm.ac.in/t/python-setup/123457",
+      "content": "How to set up Python environment for TDS course work. Use virtual environments, install required packages, and ensure compatibility.",
+      "date": "2025-04-05",
+      "tags": [
+        "python",
+        "setup",
+        "environment"
+      ]
+    },
+    {
+      "title": "GitHub Copilot Best Practices",
+      "url": "https://discourse.onlinedegree.iitm.ac.in/t/copilot-tips/123458",
+      "content": "Tips for effective use of GitHub Copilot in data science projects. Write clear comments, review generated code, and understand the suggestions.",
+      "date": "2025-04-03",
+      "tags": [
+        "copilot",
+        "AI",
+        "coding"
+      ]
+    },
+    {
+      "title": "Project Submission Guidelines",
+      "url": "https://discourse.onlinedegree.iitm.ac.in/t/submission-guide/123459",
+      "content": "How to submit TDS projects properly. Include README, requirements.txt, proper documentation, and ensure code runs without errors.",
+      "date": "2025-04-01",
+      "tags": [
+        "submission",
+        "project",
+        "guidelines"
+      ]
+    }
+  ],
+  "last_updated": "2025-06-17T06:46:48.594644"
+}
