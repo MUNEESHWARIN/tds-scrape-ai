@@ -8,11 +8,16 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
+      "dest": "app.py"
+    },
+    {
+      "src": "/health",
+      "dest": "app.py"
+    },
+    {
+      "src": "/",
       "dest": "app.py"
     }
-  ],
-  "env": {
-    "FLASK_ENV": "production"
-  }
+  ]
 }
